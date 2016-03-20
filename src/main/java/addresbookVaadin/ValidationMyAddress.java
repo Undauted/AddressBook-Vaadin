@@ -3,7 +3,7 @@ package addresbookVaadin;
 import com.vaadin.data.Validator;
 import com.vaadin.data.Validator.InvalidValueException;
 
-public class ValidationMyField {
+public class ValidationMyAddress {
 
 	public class Letters implements Validator {
         @Override

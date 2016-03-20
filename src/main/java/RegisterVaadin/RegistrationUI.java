@@ -9,6 +9,7 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Button.ClickEvent;
@@ -31,7 +32,8 @@ public class RegistrationUI extends UI {
 	 	
 	TextField filter = new TextField();
     Grid registrationList = new Grid();
-    Button newContact = new Button("Nowy kontakt");
+    Button newRegistration = new Button("Rejestracja");
+    Button newLogin = new Button("Logowanie");
 
    
     RegistrationForm registerForm = new RegistrationForm();
@@ -50,33 +52,26 @@ public class RegistrationUI extends UI {
 
     private void configureComponents() {
         
-        newContact.addClickListener(e -> registerForm.edit(new Registration()));
-
-        filter.setInputPrompt("Filtr ksiazki adresowej ....");
-        filter.addTextChangeListener(e -> refreshContacts(e.getText()));
-
-        registrationList.setContainerDataSource(new BeanItemContainer<>(Registration.class));
-        registrationList.setColumnOrder("username", "password","confirmPassword","email");
-        registrationList.removeColumn("id");
-
-    
-        registrationList.setSelectionMode(Grid.SelectionMode.SINGLE);
-        registrationList.addSelectionListener(e
-                -> registerForm.edit((Registration) registrationList.getSelectedRow()));
+        newRegistration.addClickListener(e -> registerForm.edit(new Registration()));
+        newRegistration.setStyleName(ValoTheme.BUTTON_PRIMARY);
+        newRegistration.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+        newRegistration.setHeight("100px");
+        newRegistration.setWidth("200px");
         refreshContacts();
     }
 
    
     private void buildLayout() {
-        HorizontalLayout actions = new HorizontalLayout(filter, newContact);
+        HorizontalLayout actions = new HorizontalLayout(newRegistration);
         actions.setWidth("100%");
-        filter.setWidth("100%");
-        actions.setExpandRatio(filter, 1);
-
-        VerticalLayout left = new VerticalLayout(actions, registrationList);
+        actions.setHeight("70%");
+        actions.addComponent(newRegistration);
+        actions.setComponentAlignment(newRegistration, Alignment.MIDDLE_CENTER);
+        
+        VerticalLayout left = new VerticalLayout(actions);
         left.setSizeFull();
-        registrationList.setSizeFull();
-        left.setExpandRatio(registrationList, 1);
+        
+       
 
         HorizontalLayout mainLayout = new HorizontalLayout(left, registerForm);
         mainLayout.setSizeFull();
@@ -84,6 +79,8 @@ public class RegistrationUI extends UI {
 
         
         setContent(mainLayout);
+        
+    
     }
 
     
@@ -99,7 +96,7 @@ public class RegistrationUI extends UI {
 	  
 
 
-	@WebServlet(urlPatterns = {"/register/*", "/VAADIN/*"}, name = "MyRegistration", asyncSupported = true)
+	@WebServlet(urlPatterns = {"/*", "/VAADIN/*"}, name = "MyRegistration", asyncSupported = true)
     @VaadinServletConfiguration(ui = RegistrationUI.class, productionMode = false)
     public static class MyRegistration extends VaadinServlet {
     }

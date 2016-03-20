@@ -9,12 +9,12 @@ import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.themes.ValoTheme;
 
 import addresbookVaadin.backend.Contact;
-import addresbookVaadin.ValidationMyField;
-import addresbookVaadin.ValidationMyField.Code;
-import addresbookVaadin.ValidationMyField.Email;
-import addresbookVaadin.ValidationMyField.Letters;
-import addresbookVaadin.ValidationMyField.Numbers;
-import addresbookVaadin.ValidationMyField.Phone;
+import addresbookVaadin.ValidationMyAddress;
+import addresbookVaadin.ValidationMyAddress.Code;
+import addresbookVaadin.ValidationMyAddress.Email;
+import addresbookVaadin.ValidationMyAddress.Letters;
+import addresbookVaadin.ValidationMyAddress.Numbers;
+import addresbookVaadin.ValidationMyAddress.Phone;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -73,7 +73,7 @@ public class ContactForm extends FormLayout {
         setSizeUndefined();
         setMargin(true);
 
-        ValidationMyField x = new ValidationMyField();
+        ValidationMyAddress x = new ValidationMyAddress();
         
         HorizontalLayout actions = new HorizontalLayout(save,delete, cancel);
         actions.setSpacing(true);
@@ -126,6 +126,7 @@ public class ContactForm extends FormLayout {
         
         Notification.show("Cofnieto", Type.TRAY_NOTIFICATION);
         getUI().contactList.select(null);
+        getUI().refreshContacts();
     }
 
     

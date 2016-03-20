@@ -10,6 +10,8 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import RegisterVaadin.backend.Registration;
 import addresbookVaadin.AddressbookUI;
+import addresbookVaadin.ValidationMyAddress;
+import addresbookVaadin.ValidationMyAddress.Letters;
 import addresbookVaadin.backend.Contact;
 
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -32,20 +34,16 @@ import com.vaadin.ui.VerticalLayout;
 
 
 public class RegistrationForm extends FormLayout {
-
-    Button save = new Button("Zapisz", this::save);
+	
+	Button cancel = new Button("Cofnij", this::cancel);
+    Button save = new Button("Zarejestruj", this::save);
+   
     TextField username = new TextField("Uzytkownik");
-    TextField password = new TextField("Haslo");
-    TextField confirmPassword = new TextField("Potwierdz haslo");
+    PasswordField password = new PasswordField("Haslo");
+    PasswordField confirmPassword = new PasswordField("Potwierdz haslo");
     TextField email = new TextField("Email");
 
 
-  
-    
-    
-    
-    
-    
     BeanFieldGroup<Registration> formFieldBindings;
 	private Registration registration;
 
@@ -59,14 +57,34 @@ public class RegistrationForm extends FormLayout {
         save.setStyleName(ValoTheme.BUTTON_PRIMARY);
         save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         setVisible(false);
+        
+
+       
     }
 
     private void buildLayout() {
         setSizeUndefined();
         setMargin(true);
    
-        HorizontalLayout actions = new HorizontalLayout(save);
+        ValidateMyRegister x = new ValidateMyRegister();
+        
+        HorizontalLayout actions = new HorizontalLayout(save,cancel);
         actions.setSpacing(true);
+        
+        username.addValidator(x.new Username());
+        username.setImmediate(true);
+        
+        password.addValidator(x.new Password());
+        password.setImmediate(true);
+
+        confirmPassword.addValidator(x.new Password());
+        confirmPassword.setImmediate(true);
+        
+        confirmPassword.addValidator(new Check());
+        confirmPassword.setImmediate(true);
+        
+        email.addValidator(x.new Email());
+        email.setImmediate(true);
         
 		addComponents(actions, username, password, confirmPassword, email);
     }
@@ -85,10 +103,18 @@ public class RegistrationForm extends FormLayout {
             		registration.getPassword());
             Notification.show(msg,Type.TRAY_NOTIFICATION);
             getUI().refreshContacts();
+            Page.getCurrent().setLocation("/mainPage");
             
         } catch (FieldGroup.CommitException e) {
            
         }
+    }
+    
+    public void cancel(Button.ClickEvent event) {
+        
+        Notification.show("Cofnieto", Type.TRAY_NOTIFICATION);
+        getUI().registrationList.select(null);
+        getUI().refreshContacts();
     }
 
     public void edit(Registration registration) {
@@ -105,6 +131,18 @@ public class RegistrationForm extends FormLayout {
     @Override
     public RegistrationUI getUI() {
         return (RegistrationUI) super.getUI();
+    }
+    
+//Walidacja potwierdzajaca haslo   
+    class Check implements Validator {
+        @Override
+        public void validate(Object value)
+                throws InvalidValueException {
+            if (!(value instanceof String &&
+                    ((String)value).equals(registration.getPassword()))) 
+                throw new InvalidValueException("Hasla musza byc takie same");
+        }
+
     }
 }
 
