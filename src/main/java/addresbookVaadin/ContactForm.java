@@ -3,11 +3,18 @@ package addresbookVaadin;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.event.ShortcutAction;
+import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.themes.ValoTheme;
 
 import addresbookVaadin.backend.Contact;
+import addresbookVaadin.ValidationMyField;
+import addresbookVaadin.ValidationMyField.Code;
+import addresbookVaadin.ValidationMyField.Email;
+import addresbookVaadin.ValidationMyField.Letters;
+import addresbookVaadin.ValidationMyField.Numbers;
+import addresbookVaadin.ValidationMyField.Phone;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -35,6 +42,9 @@ public class ContactForm extends FormLayout {
     Button cancel = new Button("Cofnij", this::cancel);
     TextField firstName = new TextField("Imie");
     TextField lastName = new TextField("Nazwisko");
+    TextField street = new TextField("Ulica");
+    TextField number = new TextField("Numer domu");
+    TextField code = new TextField("Kod pocztowy");
     TextField phone = new TextField("Telefon");
     TextField email = new TextField("Email");
     DateField birthDate = new DateField("Data urodzenia");
@@ -63,24 +73,33 @@ public class ContactForm extends FormLayout {
         setSizeUndefined();
         setMargin(true);
 
-       
+        ValidationMyField x = new ValidationMyField();
+        
         HorizontalLayout actions = new HorizontalLayout(save,delete, cancel);
         actions.setSpacing(true);
 
-        firstName.addValidator(new Letters());
+        firstName.addValidator(x.new Letters());
         firstName.setImmediate(true);
        
-        lastName.addValidator(new Letters());
+        lastName.addValidator(x.new Letters());
         lastName.setImmediate(true);
         
-        phone.addValidator(new Phone());
+        phone.addValidator(x.new Phone());
         phone.setImmediate(true);
         
-        email.addValidator(new Email());
+        email.addValidator(x.new Email());
         email.setImmediate(true);
        
+        street.addValidator(x.new Street());
+        street.setImmediate(true);
         
-		addComponents(actions, firstName, lastName, phone, email, birthDate);
+        number.addValidator(x.new Numbers());
+        number.setImmediate(true);
+        
+        code.addValidator(x.new Code());
+        code.setImmediate(true);
+        
+		addComponents(actions, firstName, lastName, street, number, code, phone, email, birthDate);
     }
 
     
@@ -97,6 +116,7 @@ public class ContactForm extends FormLayout {
                     contact.getLastName());
             Notification.show(msg,Type.TRAY_NOTIFICATION);
             getUI().refreshContacts();
+            
         } catch (FieldGroup.CommitException e) {
            
         }
@@ -127,7 +147,7 @@ public class ContactForm extends FormLayout {
         }
     }
     
-    void edit(Contact contact) {
+    public void edit(Contact contact) {
         this.contact = contact;
         if(contact != null) {
            
@@ -142,40 +162,6 @@ public class ContactForm extends FormLayout {
     public AddressbookUI getUI() {
         return (AddressbookUI) super.getUI();
     }
-    
-    class Letters implements Validator {
-        @Override
-        public void validate(Object value)
-                throws InvalidValueException {
-            if (!(value instanceof String &&
-                    ((String)value).matches("[A-Z]{1}[a-z]+")))
-                throw new InvalidValueException("Tylko litery. Pierwsza duza, pozostale male");
-        }
-
-    }
-    
-    class Phone implements Validator {
-        @Override
-        public void validate(Object value)
-                throws InvalidValueException {
-            if (!(value instanceof String &&
-                    ((String)value).matches("[0-9]{3}[-]{1}[0-9]{3}[-]{1}[0-9]{3}")))
-                throw new InvalidValueException("Niepoprawny numer telefonu");
-        }
-
-    }
-    
-    class Email implements Validator {
-        @Override
-        public void validate(Object value)
-                throws InvalidValueException {
-            if (!(value instanceof String &&
-                    ((String)value).matches("[A-Za-z0-9.-_]+[@]{1}[A-Za-z0-9-_]+[.]{1}[A-Za-z]{2,4}")))
-                throw new InvalidValueException("Niepoprawny email");
-        }
-
-    }
-    
 
 }
 

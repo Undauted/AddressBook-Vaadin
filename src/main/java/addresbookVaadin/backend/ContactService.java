@@ -18,7 +18,12 @@ public class ContactService {
             "Sienkiewicz", "Mickiewicz", "Slowacki", "Kacprowicz", "Tusk", "Kaczynski",
             "Krampa", "Kempa", "Banasiak", "Strzala", "Kostrzewski", "Kurkiewicz",
             "Bontal", "Strzalka", "Kasprowicz" };
-
+    static String[] stnames ={"Akacjowa", "Piastowska", "Pomorska", "Komorowskiego",
+    		"Jaggielonska", "Wita Stwosza", "Przesmyk", "Lipnowska", "Bursztynowa", "Mickiewicza",
+    		"Slowackiego", "Kawki", "Grunwaldzka", "Potokowa", "Jana Pawla II", "Gospody", "Chlopska",
+    		"Kopernika", "Subislawa"};
+    static String alphabetNumber = "ABCDEFGHIJKLMNOP";
+    
     private static ContactService instance;
 
     public static ContactService createDemoService() {
@@ -27,11 +32,33 @@ public class ContactService {
             final ContactService contactService = new ContactService();
 
             Random r = new Random(0);
+           
+            int code =0;
+            String CODE="",CODE2="";
+
             Calendar cal = Calendar.getInstance();
             for (int i = 0; i < 100; i++) {
                 Contact contact = new Contact();
                 contact.setFirstName(fnames[r.nextInt(fnames.length)]);
                 contact.setLastName(lnames[r.nextInt(fnames.length)]);
+                contact.setStreet(stnames[r.nextInt(lnames.length)]);
+                contact.setNumber(r.nextInt(200)+1+Character.toString(alphabetNumber.charAt(r.nextInt(alphabetNumber.length()))));
+                
+                //Wyliczanie kodu pocztowego
+                code = r.nextInt(100)+1;
+    			if (code<10){
+    				CODE = "0"+code;
+    	        } else{
+    	        	CODE = Integer.toString(code);
+    	        }
+    			
+    			code = r.nextInt(1000)+1;
+        		if (code<100){
+        			CODE2 = "0"+code;
+    		    } else{
+    		    	CODE2 = Integer.toString(code);
+    		    } 
+                contact.setCode(CODE+"-"+CODE2);
                 contact.setEmail(contact.getFirstName().toLowerCase() + "@"
                         + contact.getLastName().toLowerCase() + ".com");
                 contact.setPhone("721-111-" + (100 + r.nextInt(900)));

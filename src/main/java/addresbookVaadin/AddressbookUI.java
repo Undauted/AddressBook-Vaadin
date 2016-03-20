@@ -46,7 +46,7 @@ public class AddressbookUI extends UI {
         filter.addTextChangeListener(e -> refreshContacts(e.getText()));
 
         contactList.setContainerDataSource(new BeanItemContainer<>(Contact.class));
-        contactList.setColumnOrder("firstName", "lastName", "email","phone","birthDate");
+        contactList.setColumnOrder("firstName", "lastName","street","number","code", "email","phone","birthDate");
         contactList.removeColumn("id");
 
     
@@ -88,7 +88,7 @@ public class AddressbookUI extends UI {
     }
 
 
-    @WebServlet(urlPatterns = "/*")
+    @WebServlet(urlPatterns = {"/mainPage/*"}, name = "MyUIServlet", asyncSupported = true)
     @VaadinServletConfiguration(ui = AddressbookUI.class, productionMode = false)
     public static class MyUIServlet extends VaadinServlet {
     }
