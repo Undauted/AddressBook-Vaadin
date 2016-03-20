@@ -10,14 +10,14 @@ import java.util.logging.Logger;
 public class ContactService {
 
     
-    static String[] fnames = { "Peter", "Alice", "John", "Mike", "Olivia",
-            "Nina", "Alex", "Rita", "Dan", "Umberto", "Henrik", "Rene", "Lisa",
-            "Linda", "Timothy", "Daniel", "Brian", "George", "Scott",
-            "Jennifer" };
-    static String[] lnames = { "Smith", "Johnson", "Williams", "Jones",
-            "Brown", "Davis", "Miller", "Wilson", "Moore", "Taylor",
-            "Anderson", "Thomas", "Jackson", "White", "Harris", "Martin",
-            "Thompson", "Young", "King", "Robinson" };
+    static String[] fnames = { "Piotr", "Antoni", "Jan", "Mateusz", "Oliwier",
+            "Norbert", "Alex", "Rafal", "Daniel", "Henryk", "Remigiusz", "Eugeniusz",
+            "Leszek", "Tymon", "Karol", "Brajan", "Jerzy", "Slawek",
+            "Jacek" };
+    static String[] lnames = { "Kowalski", "Nowak", "Markowski", "Wietrzycki",
+            "Sienkiewicz", "Mickiewicz", "Slowacki", "Kacprowicz", "Tusk", "Kaczynski",
+            "Krampa", "Kempa", "Banasiak", "Strzala", "Kostrzewski", "Kurkiewicz",
+            "Bontal", "Strzalka", "Kasprowicz" };
 
     private static ContactService instance;
 
@@ -34,7 +34,7 @@ public class ContactService {
                 contact.setLastName(lnames[r.nextInt(fnames.length)]);
                 contact.setEmail(contact.getFirstName().toLowerCase() + "@"
                         + contact.getLastName().toLowerCase() + ".com");
-                contact.setPhone("+ 358 555 " + (100 + r.nextInt(900)));
+                contact.setPhone("721-111-" + (100 + r.nextInt(900)));
                 cal.set(1930 + r.nextInt(70),
                         r.nextInt(11), r.nextInt(28));
                 contact.setBirthDate(cal.getTime());
