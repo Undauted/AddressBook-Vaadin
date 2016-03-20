@@ -13,9 +13,12 @@ public class Contact implements Serializable, Cloneable {
     private String firstName = "";
     private String lastName = "";
     private String phone = "";
-  
     private String email = "";
     private Date birthDate;
+    private String street = "";
+    private String number = "";
+    private String code = "";
+    
 
     public Long getId() {
         return id;
@@ -60,12 +63,34 @@ public class Contact implements Serializable, Cloneable {
     public Date getBirthDate() {
         return birthDate;
     }
-    
-    
-    
+     
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
+    
+    public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+	public String getNumber() {
+		return number;
+	}
+
+	public void setNumber(String number) {
+		this.number = number;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
 
     @Override
     public Contact clone() throws CloneNotSupportedException {
@@ -80,7 +105,10 @@ public class Contact implements Serializable, Cloneable {
     public String toString() {
         return "Contact{" + "id=" + id + ", firstName=" + firstName
                 + ", lastName=" + lastName + ", phone=" + phone + ", email="
-                + email + ", birthDate=" + birthDate + '}';
+                + email + ", birthDate=" + birthDate + ", street=" + street + ", number=" 
+                + number + ", code=" + code + '}';
     }
+
+	
 
 }
