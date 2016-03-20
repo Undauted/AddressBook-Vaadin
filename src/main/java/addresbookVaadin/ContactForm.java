@@ -17,6 +17,15 @@ import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.validator.IntegerRangeValidator;
 import com.vaadin.data.validator.NullValidator;
 import com.vaadin.data.validator.StringLengthValidator;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
+
 
 
 public class ContactForm extends FormLayout {
@@ -54,9 +63,23 @@ public class ContactForm extends FormLayout {
         setSizeUndefined();
         setMargin(true);
 
+       
         HorizontalLayout actions = new HorizontalLayout(save,delete, cancel);
         actions.setSpacing(true);
 
+        firstName.addValidator(new Letters());
+        firstName.setImmediate(true);
+       
+        lastName.addValidator(new Letters());
+        lastName.setImmediate(true);
+        
+        phone.addValidator(new Phone());
+        phone.setImmediate(true);
+        
+        email.addValidator(new Email());
+        email.setImmediate(true);
+       
+        
 		addComponents(actions, firstName, lastName, phone, email, birthDate);
     }
 
@@ -112,11 +135,50 @@ public class ContactForm extends FormLayout {
             firstName.focus();
         }
         setVisible(contact != null);
+        
     }
 
     @Override
     public AddressbookUI getUI() {
         return (AddressbookUI) super.getUI();
     }
+    
+    class Letters implements Validator {
+        @Override
+        public void validate(Object value)
+                throws InvalidValueException {
+            if (!(value instanceof String &&
+                    ((String)value).matches("[A-Z]{1}[a-z]+")))
+                throw new InvalidValueException("Tylko litery. Pierwsza duza, pozostale male");
+        }
+
+    }
+    
+    class Phone implements Validator {
+        @Override
+        public void validate(Object value)
+                throws InvalidValueException {
+            if (!(value instanceof String &&
+                    ((String)value).matches("[0-9]{3}[-]{1}[0-9]{3}[-]{1}[0-9]{3}")))
+                throw new InvalidValueException("Niepoprawny numer telefonu");
+        }
+
+    }
+    
+    class Email implements Validator {
+        @Override
+        public void validate(Object value)
+                throws InvalidValueException {
+            if (!(value instanceof String &&
+                    ((String)value).matches("[A-Za-z0-9.-_]+[@]{1}[A-Za-z0-9-_]+[.]{1}[A-Za-z]{2,4}")))
+                throw new InvalidValueException("Niepoprawny email");
+        }
+
+    }
+    
 
 }
+
+
+
+
