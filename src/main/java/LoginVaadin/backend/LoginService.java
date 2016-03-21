@@ -1,29 +1,26 @@
-package RegisterVaadin.backend;
+package LoginVaadin.backend;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.beanutils.BeanUtils;
 
-import RegisterVaadin.backend.Registration;
+import LoginVaadin.backend.Login;
 
 
-
-public class RegistrationService {
+public class LoginService {
 	
-	private HashMap<Long, Registration> registers = new HashMap<>();
+	private HashMap<Long, Login> logins = new HashMap<>();
     private long nextId = 0;
 
-    public synchronized List<Registration> findAll(String stringFilter) {
+    public synchronized List<Login> findAll(String stringFilter) {
         ArrayList arrayList = new ArrayList();
-        for (Registration register : registers.values()) {
+        for (Login register : logins.values()) {
             try {
                 boolean passesFilter = (stringFilter == null || stringFilter.isEmpty())
                         || register.toString().toLowerCase()
@@ -32,14 +29,14 @@ public class RegistrationService {
                     arrayList.add(register.clone());
                 }
             } catch (CloneNotSupportedException ex) {
-                Logger.getLogger(RegistrationService.class.getName()).log(
+                Logger.getLogger(LoginService.class.getName()).log(
                         Level.SEVERE, null, ex);
             }
         }
-        Collections.sort(arrayList, new Comparator<Registration>() {
+        Collections.sort(arrayList, new Comparator<Login>() {
 
             @Override
-            public int compare(Registration o1, Registration o2) {
+            public int compare(Login o1, Login o2) {
                 return (int) (o2.getId() - o1.getId());
             }
         });
@@ -47,18 +44,19 @@ public class RegistrationService {
     }
 
     public synchronized long count() {
-        return registers.size();
+        return logins.size();
     }
 
-    public synchronized void save(Registration entry) {
+    public synchronized void save(Login entry) {
         if (entry.getId() == null) {
             entry.setId(nextId++);
         }
         try {
-            entry = (Registration) BeanUtils.cloneBean(entry);
+            entry = (Login) BeanUtils.cloneBean(entry);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-        registers.put(entry.getId(), entry);
+        logins.put(entry.getId(), entry);
     }
+
 }

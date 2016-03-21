@@ -77,8 +77,7 @@ public class RegistrationForm extends FormLayout {
         password.addValidator(x.new Password());
         password.setImmediate(true);
 
-        confirmPassword.addValidator(x.new Password());
-        confirmPassword.setImmediate(true);
+      
         
         confirmPassword.addValidator(new Check());
         confirmPassword.setImmediate(true);
@@ -96,7 +95,7 @@ public class RegistrationForm extends FormLayout {
             formFieldBindings.commit();
 
             
-            getUI().service.save(registration);
+            getUI().serviceRegistration.save(registration);
 
             String msg = String.format("Zapisany '%s %s'.",
             		registration.getUsername(),
