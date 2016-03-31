@@ -83,17 +83,17 @@ public class RegistrationUI extends UI {
     }
 
     private void buildLayout() {
-        VerticalLayout actionsRegister = new VerticalLayout(newRegistration,newLogin);
-        actionsRegister.setWidth("100%");
-        actionsRegister.setHeight("100%");
+        VerticalLayout actionsRegister = new VerticalLayout(newRegistration);
+        VerticalLayout actionsRegister1 = new VerticalLayout(newLogin);
+        actionsRegister.setHeight("170%");
         actionsRegister.addComponent(newRegistration);
-        actionsRegister.addComponent(newLogin);
+        actionsRegister1.addComponent(newLogin);
        
         actionsRegister.setComponentAlignment(newRegistration, Alignment.MIDDLE_CENTER);
-        actionsRegister.setComponentAlignment(newLogin, Alignment.MIDDLE_CENTER);
+        actionsRegister1.setComponentAlignment(newLogin, Alignment.MIDDLE_CENTER);
         
         
-        VerticalLayout leftRegister = new VerticalLayout(actionsRegister);
+        VerticalLayout leftRegister = new VerticalLayout(actionsRegister,actionsRegister1);
         leftRegister.setSizeFull();
         
         HorizontalLayout mainLayoutRegister = new HorizontalLayout(leftRegister, registerForm);

@@ -12,6 +12,10 @@ import java.util.logging.Logger;
 
 import org.apache.commons.beanutils.BeanUtils;
 
+import com.vaadin.server.Page;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
+
 import RegisterVaadin.backend.Registration;
 
 
@@ -44,6 +48,34 @@ public class RegistrationService {
             }
         });
         return arrayList;
+    }
+    
+    
+    public synchronized boolean check(String stringFilter) {
+    	boolean passed=true;
+        for (Registration register : registers.values()) {
+            try {
+               
+                if (register.getUsername().toString().toLowerCase()
+                        .equals(stringFilter.toLowerCase()) == true) {
+                	 passed=false;
+                	 
+                }
+               
+            } catch (Exception ex) {
+                Logger.getLogger(RegistrationService.class.getName()).log(
+                        Level.SEVERE, null, ex);
+            }
+        }
+        
+        
+        if(passed == true){
+        	Page.getCurrent().setLocation("/mainPage");
+        	return true;
+        } else {
+        	Notification.show("Username exists!", Notification.Type.WARNING_MESSAGE);
+        	return false;
+        }
     }
 
     public synchronized long count() {

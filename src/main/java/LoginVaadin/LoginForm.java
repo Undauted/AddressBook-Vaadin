@@ -18,6 +18,8 @@ import com.vaadin.ui.themes.ValoTheme;
 
 
 import LoginVaadin.backend.Login;
+import RegisterVaadin.ValidateMyRegister.Password;
+import RegisterVaadin.ValidateMyRegister.Username;
 
 public class LoginForm extends FormLayout {
 	
@@ -49,11 +51,16 @@ public class LoginForm extends FormLayout {
         setSizeUndefined();
         setMargin(true);
    
-       
+       ValidateMyLogin x = new ValidateMyLogin();
         
         HorizontalLayout actions = new HorizontalLayout(save,cancel);
         actions.setSpacing(true);
         
+        username.addValidator(x.new Username());
+        username.setImmediate(true);
+        
+        password.addValidator(x.new Password());
+        password.setImmediate(true);
         
         
 		addComponents(actions, username, password);
@@ -66,13 +73,7 @@ public class LoginForm extends FormLayout {
             formFieldBindings.commit();
 
             
-            getUI().serviceLogin.save(login);
-
-            String msg = String.format("Zapisany '%s %s'.",
-            		login.getUsername(),
-            		login.getPassword());
-            Notification.show(msg,Type.TRAY_NOTIFICATION);
-            getUI().refreshContacts();
+           
             Page.getCurrent().setLocation("/mainPage");
             
         } catch (FieldGroup.CommitException e) {
@@ -83,8 +84,7 @@ public class LoginForm extends FormLayout {
     public void cancel(Button.ClickEvent event) {
         
         Notification.show("Cofnieto", Type.TRAY_NOTIFICATION);
-        getUI().registrationList.select(null);
-        getUI().refreshContacts();
+    
     }
 
     public void edit(Login login) {
