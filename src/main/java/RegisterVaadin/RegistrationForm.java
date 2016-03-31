@@ -9,6 +9,7 @@ import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.themes.ValoTheme;
 
 import RegisterVaadin.backend.Registration;
+import RegisterVaadin.backend.RegistrationService;
 import addresbookVaadin.AddressbookUI;
 import addresbookVaadin.ValidationMyAddress;
 import addresbookVaadin.ValidationMyAddress.Letters;
@@ -43,7 +44,7 @@ public class RegistrationForm extends FormLayout {
     PasswordField confirmPassword = new PasswordField("Potwierdz haslo");
     TextField email = new TextField("Email");
 
-
+    RegistrationService serviceRegistration = new RegistrationService();
     BeanFieldGroup<Registration> formFieldBindings;
 	private Registration registration;
 
@@ -74,36 +75,37 @@ public class RegistrationForm extends FormLayout {
         username.addValidator(x.new Username());
         username.setImmediate(true);
         
+        
+        
         password.addValidator(x.new Password());
         password.setImmediate(true);
 
-        confirmPassword.addValidator(x.new Password());
-        confirmPassword.setImmediate(true);
+      
         
         confirmPassword.addValidator(new Check());
         confirmPassword.setImmediate(true);
         
         email.addValidator(x.new Email());
         email.setImmediate(true);
-        
+        email.setInputPrompt("eg. abc.a@wp.pl");
 		addComponents(actions, username, password, confirmPassword, email);
     }
 
     
     public void save(Button.ClickEvent event) {
         try {
-          
-            formFieldBindings.commit();
-
-            
-            getUI().service.save(registration);
-
-            String msg = String.format("Zapisany '%s %s'.",
-            		registration.getUsername(),
-            		registration.getPassword());
-            Notification.show(msg,Type.TRAY_NOTIFICATION);
-            getUI().refreshContacts();
-            Page.getCurrent().setLocation("/mainPage");
+        	boolean passed = getUI().serviceRegistration.check(registration.getUsername());
+        	if(passed){
+	            formFieldBindings.commit();
+	
+	            
+	            getUI().serviceRegistration.save(registration);
+	
+	            String msg = String.format("Zapisany '%s'.",
+	            		registration.getUsername());
+	            Notification.show(msg,Type.TRAY_NOTIFICATION);
+	            getUI().refreshContacts();
+        	}
             
         } catch (FieldGroup.CommitException e) {
            
@@ -144,6 +146,8 @@ public class RegistrationForm extends FormLayout {
         }
 
     }
+    
+ 
 }
 
 

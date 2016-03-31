@@ -12,34 +12,16 @@ import java.util.logging.Logger;
 
 import org.apache.commons.beanutils.BeanUtils;
 
+import com.vaadin.server.Page;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
+
 import RegisterVaadin.backend.Registration;
 
 
 
 public class RegistrationService {
 	
-	private static RegistrationService instance;
-	
-	public static RegistrationService createDemoService() {
-        if (instance == null) {
-
-            final RegistrationService registrationService = new RegistrationService();
-            for (int i = 0; i < 1; i++) {
-                Registration contact = new Registration();
-                contact.setUsername("username");
-                contact.setPassword("password");
-                contact.setConfirmPassword("password");
-                contact.setEmail("piotr@wp.pl");
-                
-            
-                registrationService.save(contact);
-            }
-            instance = registrationService;
-        }
-
-        return instance;
-    }
-
 	private HashMap<Long, Registration> registers = new HashMap<>();
     private long nextId = 0;
 
@@ -67,13 +49,37 @@ public class RegistrationService {
         });
         return arrayList;
     }
+    
+    
+    public synchronized boolean check(String stringFilter) {
+    	boolean passed=true;
+        for (Registration register : registers.values()) {
+            try {
+               
+                if (register.getUsername().toString().toLowerCase()
+                        .equals(stringFilter.toLowerCase()) == true) {
+                	 passed=false;
+                	 
+                }
+               
+            } catch (Exception ex) {
+                Logger.getLogger(RegistrationService.class.getName()).log(
+                        Level.SEVERE, null, ex);
+            }
+        }
+        
+        
+        if(passed == true){
+        	Page.getCurrent().setLocation("/mainPage");
+        	return true;
+        } else {
+        	Notification.show("Username exists!", Notification.Type.WARNING_MESSAGE);
+        	return false;
+        }
+    }
 
     public synchronized long count() {
         return registers.size();
-    }
-
-    public synchronized void delete(Registration value) {
-    	registers.remove(value.getId());
     }
 
     public synchronized void save(Registration entry) {
